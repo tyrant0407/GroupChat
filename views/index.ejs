@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  </head>
+  <style>
+  
+  </style>
+  <body>
+    <div class="">
+      <div class="chatui min-h-screen flex flex-col">
+        <!-- Header -->
+      
+        
+        <!-- Chat area -->
+        <div  class="messages flex-1 flex flex-col justify-end px-4 py-2 overflow-y-auto">
+          <!-- Sender Message -->
+        
+          <!-- Receiver Message -->
+         
+        </div>
+        
+        <!-- Input area -->
+        <div class="bg-gray-100 px-4 py-2 flex items-center">
+          <input id="input" type="text" placeholder="Type your message..." class="flex-1 py-2 px-4 rounded-full border-gray-300 focus:outline-none focus:ring focus:border-blue-500">
+          <button onclick="appendOutgoingMessage()" class="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white">Send</button>
+        </div>
+      </div>
+
+    </div>
+
+    
+   
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        function appendOutgoingMessage(){
+          const message = document.querySelector('#input').value
+          const teamplate =`<div class="flex justify-end mb-2">
+            <div class="bg-blue-600 text-white py-2 px-4 rounded-lg max-w-xs">
+             ${message}
+            </div>
+          </div>`
+          socket.emit('sony',message)
+          document.querySelector('.messages').innerHTML += teamplate
+          document.querySelector('#input').value = ""
+        }
+       
+        function appendinComingMessage(incomingMessage){
+         const teamplate = `<div class="flex justify-start mb-2">
+            <div class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg max-w-xs">
+              ${incomingMessage}
+            </div>
+          </div>`
+          document.querySelector(".messages").innerHTML += teamplate
+        }
+        socket.on('max',incomingMessage=>{
+          console.log(incomingMessage)
+          appendinComingMessage(incomingMessage)
+        })
+
+    </script>
+  </body>
+</html>

@@ -1,26 +1,53 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Home</title>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+    rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<style>
+.addFriend {
+ font-size: 0.8rem;
+ padding: 0.5em 0.8em;
+ border: transparent;
+ box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+ background: dodgerblue;
 
-  </head>
-  <style>
-  
-  </style>
-  <body>
-    <div class="">
-      <div class="chatui min-h-screen flex flex-col">
+ border-radius: 4px;
+}
+.background{
+    background: rgba(158,250,190,0.5);
+-webkit-backdrop-filter: blur(16px);
+backdrop-filter: blur(16px);
+border: 1px solid rgba(158,250,190,0.25);
+}
+</style>
+<body >
+    <!-- chatui -->
+    <div class="chatui min-h-screen flex flex-col">
         <!-- Header -->
-      
+        <div class="bg-gray-800 h-16 text-white p-2 flex gap-5 items-center">
+            <div class="flex gap-5 items-center">
+                <i id="back" class="ri-arrow-left-fill"></i>
+                <img src="/images/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg" alt="Profile" class="w-10 h-10 rounded-full">
+
+            </div>
+            <div class="ml-3">
+                <h2 class="text-lg font-semibold">Group Chat </h2>
+             
+            </div>
+        </div>
         
         <!-- Chat area -->
-        <div  class="messages flex-1 flex flex-col justify-end px-4 py-2 overflow-y-auto">
+        <div class="messages flex-1 flex flex-col justify-end px-4 py-2 overflow-y-auto">
           <!-- Sender Message -->
-        
-          <!-- Receiver Message -->
          
+          <!-- Receiver Message -->
+       
         </div>
         
         <!-- Input area -->
@@ -29,40 +56,42 @@
           <button onclick="appendOutgoingMessage()" class="ml-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-full text-white">Send</button>
         </div>
       </div>
+      
 
-    </div>
 
+  
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+          var socket = io();
+  
+          function appendOutgoingMessage() {
+              const message = document.querySelector('#input').value
+              const template = `<div class="flex justify-end mb-2">
+                                  <div class="bg-blue-600 text-white py-2 px-4 rounded-lg max-w-xs">
+                                      ${message}
+                                  </div>
+                                </div>`
+              socket.emit('sony', message)
+              document.querySelector('.messages').innerHTML += template
+              document.querySelector('#input').value = ""
+          }
+  
+          function appendIncomingMessage(incomingMessage) {
+              const template = `<div class="flex justify-start mb-2">
+                                  <div class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg max-w-xs">
+                                      ${incomingMessage}
+                                  </div>
+                                </div>`
+              document.querySelector(".messages").innerHTML += template
+          }
+          socket.on('max', incomingMessage => {
+              console.log(incomingMessage)
+              appendIncomingMessage(incomingMessage)
+          })
+  
+      </script>
+  
     
-   
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-
-        function appendOutgoingMessage(){
-          const message = document.querySelector('#input').value
-          const teamplate =`<div class="flex justify-end mb-2">
-            <div class="bg-blue-600 text-white py-2 px-4 rounded-lg max-w-xs">
-             ${message}
-            </div>
-          </div>`
-          socket.emit('sony',message)
-          document.querySelector('.messages').innerHTML += teamplate
-          document.querySelector('#input').value = ""
-        }
-       
-        function appendinComingMessage(incomingMessage){
-         const teamplate = `<div class="flex justify-start mb-2">
-            <div class="bg-gray-200 text-gray-800 py-2 px-4 rounded-lg max-w-xs">
-              ${incomingMessage}
-            </div>
-          </div>`
-          document.querySelector(".messages").innerHTML += teamplate
-        }
-        socket.on('max',incomingMessage=>{
-          console.log(incomingMessage)
-          appendinComingMessage(incomingMessage)
-        })
-
-    </script>
-  </body>
+</body>
 </html>
+

@@ -63,6 +63,11 @@ border: 1px solid rgba(158,250,190,0.25);
       <script src="/socket.io/socket.io.js"></script>
       <script>
           var socket = io();
+          const roomName = prompt('enter room name')
+          console.log(roomName)
+
+          socket.emit('join-room',roomName)
+
   
           function appendOutgoingMessage() {
               const message = document.querySelector('#input').value
@@ -71,7 +76,7 @@ border: 1px solid rgba(158,250,190,0.25);
                                       ${message}
                                   </div>
                                 </div>`
-              socket.emit('sony', message)
+              socket.emit('sony',{message,roomName})
               document.querySelector('.messages').innerHTML += template
               document.querySelector('#input').value = ""
           }
